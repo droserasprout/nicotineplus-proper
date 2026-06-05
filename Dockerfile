@@ -1,4 +1,4 @@
-FROM ubuntu:24.04
+FROM ubuntu:24.04 AS base
 ARG DEBIAN_FRONTEND=noninteractive
 
 # Set environment variables
@@ -81,3 +81,16 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
 
 # Run Nicotine+ startup script
 CMD ["init.sh"]
+
+FROM base
+ARG DEBIAN_FRONTEND=noninteractive
+ARG GTK_PKG_BASE=https://github.com/droserasprout/gtk-broadway/releases/download/4.14.5-latest
+RUN set -eux; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends ca-certificates wget; \
+    wget -O /tmp/gtk-broadway-fork.deb "${GTK_PKG_BASE}/libgtk4-broadway-fork_$(dpkg --print-architecture).deb"; \
+    apt-get install -y --no-install-recommends /tmp/gtk-broadway-fork.deb; \
+    apt-mark hold libgtk-4-1 libgtk-4-bin; \
+    rm -f /tmp/gtk-broadway-fork.deb; \
+    apt-get clean; \
+    rm -rf /var/lib/apt/lists/*
