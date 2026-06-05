@@ -1,4 +1,5 @@
-FROM ubuntu:24.04 AS base
+ARG UBUNTU_VERSION=24.04
+FROM ubuntu:${UBUNTU_VERSION} AS base
 ARG DEBIAN_FRONTEND=noninteractive
 
 # Set environment variables
@@ -82,13 +83,24 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
 # Run Nicotine+ startup script
 CMD ["init.sh"]
 
+# Install patched GTK Broadway library from prebuilt .deb
 FROM base
 ARG DEBIAN_FRONTEND=noninteractive
-ARG GTK_PKG_BASE=https://github.com/droserasprout/gtk-broadway/releases/download/4.14.5-latest
+ARG PATCH_RELEASE=v1
 RUN set -eux; \
     apt-get update; \
     apt-get install -y --no-install-recommends ca-certificates wget; \
-    wget -O /tmp/gtk-broadway-fork.deb "${GTK_PKG_BASE}/libgtk4-broadway-fork_$(dpkg --print-architecture).deb"; \
+    . /etc/os-release; \
+    case "${VERSION_ID}" in \
+      24.04) gtk_ver="4.14.5" ;; \
+      26.04) gtk_ver="4.22.2" ;; \
+      *) echo "No Broadway GTK fork release mapped for Ubuntu ${VERSION_ID}" >&2; exit 1 ;; \
+    esac; \
+    case "${PATCH_RELEASE}" in v*) ;; *) echo "PATCH_RELEASE must be a vN tag, got '${PATCH_RELEASE}'" >&2; exit 1 ;; esac; \
+    arch="$(dpkg --print-architecture)"; \
+    deb="gtk4-broadway-fork_${gtk_ver}-${PATCH_RELEASE#v}_${arch}.deb"; \
+    url="https://github.com/droserasprout/gtk-broadway/releases/download/${PATCH_RELEASE}"; \
+    wget -O /tmp/gtk-broadway-fork.deb "${url}/${deb}"; \
     apt-get install -y --no-install-recommends /tmp/gtk-broadway-fork.deb; \
     apt-mark hold libgtk-4-1 libgtk-4-bin; \
     rm -f /tmp/gtk-broadway-fork.deb; \
