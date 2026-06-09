@@ -55,9 +55,25 @@ jobs:
         with:
           context: .
           file: Dockerfile
+          target: fork
           platforms: linux/amd64,linux/arm64
           build-args: |
             UBUNTU_VERSION=${{ matrix.base.ubuntu }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+      # Offline UI-preview image with the demodata plugin baked in; 4.22 base only.
+      - name: Build and push :demo (4.22 only)
+        if: matrix.base.ubuntu == '26.04'
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: Dockerfile
+          target: demo
+          platforms: linux/amd64,linux/arm64
+          build-args: |
+            UBUNTU_VERSION=${{ matrix.base.ubuntu }}
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:demo
           labels: ${{ steps.meta.outputs.labels }}
