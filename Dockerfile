@@ -26,8 +26,6 @@ EXPOSE ${WEB_UI_PORT}
 
 # Install runtime dependencies and necessary packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    git \
-    ca-certificates \
     gir1.2-gtk-4.0 \
     gir1.2-adw-1 \
     gir1.2-gspell-1 \
@@ -66,6 +64,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Install Nicotine+ from the fork, run straight from source (like Dockerfile.local).
 # Tracks the broadway branch by default; override NICOTINE_REF to pin a tag/SHA.
+# git is install+used+purged in this single layer so it never ships; the source tree
+# is pruned to what runs (nicotine launcher, pynicotine, data) - po/doc/debian/build-aux
+# are build/i18n-only and unused at runtime (image runs English-only, no .mo built).
 ARG NICOTINE_REPO=https://github.com/droserasprout/nicotine-plus.git
 ARG NICOTINE_REF=broadway
 # Cache-bust: when tracking a moving branch, pass --build-arg NICOTINE_REV=<tip-sha>
@@ -74,12 +75,19 @@ ARG NICOTINE_REF=broadway
 ARG NICOTINE_REV=
 RUN set -eux; \
     echo "nicotine-plus ${NICOTINE_REF} @ ${NICOTINE_REV:-unpinned}"; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends git ca-certificates; \
     git clone --depth 1 --branch "${NICOTINE_REF}" "${NICOTINE_REPO}" /opt/nicotine-plus; \
+    rm -rf /opt/nicotine-plus/.git /opt/nicotine-plus/po /opt/nicotine-plus/doc \
+           /opt/nicotine-plus/debian /opt/nicotine-plus/build-aux /opt/nicotine-plus/.github; \
     printf '#!/bin/sh\nexec python3 /opt/nicotine-plus/nicotine "$@"\n' > /usr/bin/nicotine; \
     chmod +x /usr/bin/nicotine; \
     python3 -m py_compile /opt/nicotine-plus/nicotine; \
     python3 -m compileall -q /opt/nicotine-plus/pynicotine; \
-    rm -rf /opt/nicotine-plus/.git
+    apt-get purge -y git; \
+    apt-get autoremove -y --purge; \
+    apt-get clean; \
+    rm -rf /var/lib/apt/lists/*
 
 # Import configuration files and launch scripts
 COPY config-default /home/nicotine/config-default

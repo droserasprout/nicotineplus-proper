@@ -1,5 +1,8 @@
 .git
+.gitignore
 .github
 .claude
-README.md
+*.md
 LICENSE
+Dockerfile
+.dockerignore
