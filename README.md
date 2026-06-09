@@ -1,6 +1,6 @@
 # nicotineplus-proper fork
 
-Fork of [sirjmann92/nicotineplus-proper](https://github.com/sirjmann92/nicotineplus-proper) running [Nicotine+](https://github.com/nicotine-plus/nicotine-plus) fork on [GTK Broadway](https://github.com/droserasprout/gtk-broadway) fork.
+Fork of [sirjmann92/nicotineplus-proper](https://github.com/sirjmann92/nicotineplus-proper) running [Nicotine+](https://github.com/nicotine-plus/nicotine-plus) fork on the [gtk-brotway](https://github.com/droserasprout/gtk-brotway) GTK Broadway fork.
 
 Published to `ghcr.io/droserasprout/nicotineplus-proper`. Tags:
 

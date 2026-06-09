@@ -112,6 +112,7 @@ CMD ["init.sh"]
 # is the default last stage).
 FROM base AS fork
 ARG DEBIAN_FRONTEND=noninteractive
+# Bump to the first vN release that ships the renamed gtk4-brotway debs.
 ARG PATCH_RELEASE=v2.1
 RUN set -eux; \
     apt-get update; \
@@ -124,12 +125,12 @@ RUN set -eux; \
     esac; \
     case "${PATCH_RELEASE}" in v*) ;; *) echo "PATCH_RELEASE must be a vN tag, got '${PATCH_RELEASE}'" >&2; exit 1 ;; esac; \
     arch="$(dpkg --print-architecture)"; \
-    deb="gtk4-broadway-fork_${gtk_ver}-${PATCH_RELEASE#v}_${arch}.deb"; \
-    url="https://github.com/droserasprout/gtk-broadway/releases/download/${PATCH_RELEASE}"; \
-    wget -O /tmp/gtk-broadway-fork.deb "${url}/${deb}"; \
-    apt-get install -y --no-install-recommends /tmp/gtk-broadway-fork.deb; \
+    deb="gtk4-brotway_${gtk_ver}-${PATCH_RELEASE#v}_${arch}.deb"; \
+    url="https://github.com/droserasprout/gtk-brotway/releases/download/${PATCH_RELEASE}"; \
+    wget -O /tmp/gtk-brotway.deb "${url}/${deb}"; \
+    apt-get install -y --no-install-recommends /tmp/gtk-brotway.deb; \
     apt-mark hold libgtk-4-1 libgtk-4-bin; \
-    rm -f /tmp/gtk-broadway-fork.deb; \
+    rm -f /tmp/gtk-brotway.deb; \
     apt-get clean; \
     rm -rf /var/lib/apt/lists/*
 
