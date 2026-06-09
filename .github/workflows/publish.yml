@@ -2,7 +2,7 @@ name: Build and publish image
 
 # Builds image for two Ubuntu bases, each as a multi-arch (amd64+arm64)
 # manifest. UBUNTU_VERSION selects the base, and the Dockerfile derives the
-# matching Broadway GTK fork .deb from it. Tags: 2404 + 2604; latest tracks 2404.
+# matching Broadway GTK fork .deb from it. Tags: 2404 + 2604; latest tracks 2604.
 
 on:
   push:
@@ -24,8 +24,8 @@ jobs:
       fail-fast: false
       matrix:
         base:
-          - { ubuntu: "24.04", tag: "2404", latest: "true",  tag_suffix: "" }
-          - { ubuntu: "26.04", tag: "2604", latest: "false", tag_suffix: "-2604" }
+          - { ubuntu: "24.04", tag: "2404", latest: "false", tag_suffix: "-2404" }
+          - { ubuntu: "26.04", tag: "2604", latest: "true",  tag_suffix: "" }
     steps:
       - uses: actions/checkout@v4
 
