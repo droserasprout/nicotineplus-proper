@@ -112,7 +112,7 @@ CMD ["init.sh"]
 # is the default last stage).
 FROM base AS fork
 ARG DEBIAN_FRONTEND=noninteractive
-ARG PATCH_RELEASE=v2
+ARG PATCH_RELEASE=v2.1
 RUN set -eux; \
     apt-get update; \
     apt-get install -y --no-install-recommends ca-certificates wget; \
