@@ -112,14 +112,14 @@ CMD ["init.sh"]
 # is the default last stage).
 FROM base AS fork
 ARG DEBIAN_FRONTEND=noninteractive
-# Bump to the first vN release that ships the renamed gtk4-brotway debs.
-ARG PATCH_RELEASE=v2.1
+# The gtk-brotway release whose .deb this image installs.
+ARG PATCH_RELEASE=v3.0.0
 RUN set -eux; \
     apt-get update; \
     apt-get install -y --no-install-recommends ca-certificates wget; \
     . /etc/os-release; \
     case "${VERSION_ID}" in \
-      26.04) gtk_ver="4.22.2" ;; \
+      26.04) gtk_ver="4.22.4" ;; \
       *) echo "No Broadway GTK fork release mapped for Ubuntu ${VERSION_ID}" >&2; exit 1 ;; \
     esac; \
     case "${PATCH_RELEASE}" in v*) ;; *) echo "PATCH_RELEASE must be a vN tag, got '${PATCH_RELEASE}'" >&2; exit 1 ;; esac; \

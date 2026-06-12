@@ -4,7 +4,7 @@
 
 Published to `ghcr.io/droserasprout/nicotineplus-proper`. Tags:
 
-- `latest` / `2604`: Ubuntu 26.04, GTK 4.22.2.
+- `latest` / `2604`: Ubuntu 26.04, GTK 4.22.4.
 - `demo`: 2604 with synthetic data, see below.
 
 Dev only, don't use in production.
