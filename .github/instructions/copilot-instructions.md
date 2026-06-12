@@ -7,7 +7,7 @@ This repository contains a Docker-based implementation of Nicotine+ (a Soulseek 
 ## Project Architecture
 
 ### Core Technologies
-- **Docker**: Ubuntu 24.04 base image
+- **Docker**: Ubuntu 26.04 base image
 - **GTK Broadway**: Display server for rendering GTK applications in browsers via WebSockets
 - **Nicotine+**: The Soulseek client application (GTK4 and GTK3 variants)
 - **NGINX**: Web server for serving the Broadway interface
@@ -200,7 +200,7 @@ Since this is a Docker project, testing involves:
 - Nicotine+ Official: https://nicotine-plus.org
 - Nicotine+ GitHub: https://github.com/nicotine-plus/nicotine-plus
 - GTK Broadway Documentation: https://docs.gtk.org/gtk4/broadway.html
-- Ubuntu 24.04 Base Image: https://hub.docker.com/_/ubuntu
+- Ubuntu 26.04 Base Image: https://hub.docker.com/_/ubuntu
 
 ### Project Links
 - Project Docker Hub: https://hub.docker.com/r/sirjmann92/nicotineplus-proper

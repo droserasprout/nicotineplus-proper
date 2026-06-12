@@ -1,4 +1,4 @@
-ARG UBUNTU_VERSION=24.04
+ARG UBUNTU_VERSION=26.04
 FROM ubuntu:${UBUNTU_VERSION} AS base
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -119,7 +119,6 @@ RUN set -eux; \
     apt-get install -y --no-install-recommends ca-certificates wget; \
     . /etc/os-release; \
     case "${VERSION_ID}" in \
-      24.04) gtk_ver="4.14.5" ;; \
       26.04) gtk_ver="4.22.2" ;; \
       *) echo "No Broadway GTK fork release mapped for Ubuntu ${VERSION_ID}" >&2; exit 1 ;; \
     esac; \

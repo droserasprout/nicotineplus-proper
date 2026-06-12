@@ -1,8 +1,8 @@
 name: Build and publish image
 
-# Builds image for two Ubuntu bases, each as a multi-arch (amd64+arm64)
-# manifest. UBUNTU_VERSION selects the base, and the Dockerfile derives the
-# matching Broadway GTK fork .deb from it. Tags: 2404 + 2604; latest tracks 2604.
+# Builds the image as a multi-arch (amd64+arm64) manifest on the single Ubuntu
+# 26.04 base. The Dockerfile derives the matching Broadway GTK fork .deb from it.
+# Tags: 2604 + latest.
 
 on:
   push:
@@ -24,7 +24,6 @@ jobs:
       fail-fast: false
       matrix:
         base:
-          - { ubuntu: "24.04", tag: "2404", latest: "false", tag_suffix: "-2404" }
           - { ubuntu: "26.04", tag: "2604", latest: "true",  tag_suffix: "" }
     steps:
       - uses: actions/checkout@v4
@@ -63,9 +62,8 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-      # Offline UI-preview image with the demodata plugin baked in; 4.22 base only.
-      - name: Build and push :demo (4.22 only)
-        if: matrix.base.ubuntu == '26.04'
+      # Offline UI-preview image with the demodata plugin baked in.
+      - name: Build and push :demo
         uses: docker/build-push-action@v5
         with:
           context: .
