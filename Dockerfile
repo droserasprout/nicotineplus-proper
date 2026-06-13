@@ -1,5 +1,9 @@
+# Production base: the prebuilt brotway image (patched GTK baked in + held). The
+# local GTK-compile path (build-local) overrides BASE_IMAGE=ubuntu:<ver>, keeping
+# `base` fork-free so Dockerfile.local can layer a worktree-built GTK on top.
 ARG UBUNTU_VERSION=26.04
-FROM ubuntu:${UBUNTU_VERSION} AS base
+ARG BASE_IMAGE=ghcr.io/droserasprout/gtk-brotway:v3.0.0
+FROM ${BASE_IMAGE} AS base
 ARG DEBIAN_FRONTEND=noninteractive
 
 # Set environment variables
@@ -107,31 +111,11 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
 # Run Nicotine+ startup script
 CMD ["init.sh"]
 
-# Install patched GTK Broadway library from prebuilt .deb. This `fork` stage is the
-# production image; build it explicitly with `--target fork` (the `demo` stage below
-# is the default last stage).
+# Production image (`--target fork`). The patched GTK comes from the brotway BASE_IMAGE
+# (already installed + held), so there's nothing to add here - this stage just names
+# the build target. On the ubuntu BASE_IMAGE (build-local), Dockerfile.local supplies
+# the worktree-built GTK instead.
 FROM base AS fork
-ARG DEBIAN_FRONTEND=noninteractive
-# The gtk-brotway release whose .deb this image installs.
-ARG PATCH_RELEASE=v3.0.0
-RUN set -eux; \
-    apt-get update; \
-    apt-get install -y --no-install-recommends ca-certificates wget; \
-    . /etc/os-release; \
-    case "${VERSION_ID}" in \
-      26.04) gtk_ver="4.22.4" ;; \
-      *) echo "No Broadway GTK fork release mapped for Ubuntu ${VERSION_ID}" >&2; exit 1 ;; \
-    esac; \
-    case "${PATCH_RELEASE}" in v*) ;; *) echo "PATCH_RELEASE must be a vN tag, got '${PATCH_RELEASE}'" >&2; exit 1 ;; esac; \
-    arch="$(dpkg --print-architecture)"; \
-    deb="gtk4-brotway_${gtk_ver}-${PATCH_RELEASE#v}_${arch}.deb"; \
-    url="https://github.com/droserasprout/gtk-brotway/releases/download/${PATCH_RELEASE}"; \
-    wget -O /tmp/gtk-brotway.deb "${url}/${deb}"; \
-    apt-get install -y --no-install-recommends /tmp/gtk-brotway.deb; \
-    apt-mark hold libgtk-4-1 libgtk-4-bin; \
-    rm -f /tmp/gtk-brotway.deb; \
-    apt-get clean; \
-    rm -rf /var/lib/apt/lists/*
 
 # Demo image (:demo tag): enable the demodata plugin and default to offline, so the
 # WebUI fills with synthetic data without touching the real Soulseek server. Last
