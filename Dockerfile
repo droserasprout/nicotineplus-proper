@@ -96,7 +96,6 @@ RUN set -eux; \
 # Import configuration files and launch scripts
 COPY config-default /home/nicotine/config-default
 COPY default /etc/nginx/sites-available/default
-COPY favicon.ico /var/www/favicon.ico
 COPY init.sh /usr/local/bin/init.sh
 COPY launch.sh /usr/local/bin/launch.sh
 COPY healthcheck.sh /usr/local/bin/healthcheck.sh

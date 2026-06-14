@@ -19,7 +19,6 @@ This repository contains a Docker-based implementation of Nicotine+ (a Soulseek 
 3. **launch.sh**: Application launch script (runs as nicotine user)
 4. **config-default**: Default Nicotine+ configuration template
 5. **default**: NGINX configuration for Broadway WebSocket support
-6. **favicon.ico**: Browser tab icon
 
 ## File Structure
 
@@ -30,7 +29,6 @@ This repository contains a Docker-based implementation of Nicotine+ (a Soulseek 
 ├── launch.sh           # Application launcher (user)
 ├── config-default      # Default Nicotine+ config
 ├── default             # NGINX config
-├── favicon.ico         # Browser favicon
 ├── README.md           # Documentation
 └── .github/
     └── instructions/   # Copilot instructions
