@@ -2,7 +2,7 @@
 # local GTK-compile path (build-local) overrides BASE_IMAGE=ubuntu:<ver>, keeping
 # `base` fork-free so Dockerfile.local can layer a worktree-built GTK on top.
 ARG UBUNTU_VERSION=26.04
-ARG BASE_IMAGE=ghcr.io/droserasprout/gtk-brotway:v3.0.0
+ARG BASE_IMAGE=ghcr.io/droserasprout/gtk-brotway:v3.1.0
 FROM ${BASE_IMAGE} AS base
 ARG DEBIAN_FRONTEND=noninteractive
 
