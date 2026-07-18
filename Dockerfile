@@ -2,7 +2,7 @@
 # local GTK-compile path (build-local) overrides BASE_IMAGE=ubuntu:<ver>, keeping
 # `base` fork-free so Dockerfile.local can layer a worktree-built GTK on top.
 ARG UBUNTU_VERSION=26.04
-ARG BASE_IMAGE=ghcr.io/droserasprout/gtk-brotway:v3.1.2
+ARG BASE_IMAGE=ghcr.io/droserasprout/gtk-brotway:v3.2.0-nogl
 FROM ${BASE_IMAGE} AS base
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -33,7 +33,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     gir1.2-gtk-4.0 \
     gir1.2-adw-1 \
     gir1.2-gspell-1 \
-    libgtk-4-bin \
     librsvg2-common \
     python3-gi \
     python3-gi-cairo \
