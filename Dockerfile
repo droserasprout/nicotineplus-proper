@@ -59,8 +59,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && ln -s /home/nicotine/.local/share/nicotine /data \
     && ln -s /home/nicotine/.local/share/nicotine/plugins /data/plugins \
     && chown -R nicotine:nicotine /config /data /home/nicotine/.config /home/nicotine/.local /var/log \
-# Cleanup
-    && apt-get autoremove -y \
+# Cleanup - no autoremove: the -nogl base's GTK runtime libs (libtiff/libjpeg/
+# harfbuzz-subset/cairo-script) are orphaned in the pkg graph; autoremove nukes them.
     && apt-get autoclean \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
@@ -88,7 +88,6 @@ RUN set -eux; \
     python3 -m py_compile /opt/nicotine-plus/nicotine; \
     python3 -m compileall -q /opt/nicotine-plus/pynicotine; \
     apt-get purge -y git; \
-    apt-get autoremove -y --purge; \
     apt-get clean; \
     rm -rf /var/lib/apt/lists/*
 
